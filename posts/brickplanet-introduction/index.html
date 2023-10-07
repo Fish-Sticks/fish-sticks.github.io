@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Reverse Engineering Brickplanet | Introduction :: Fishy&#39;s Blog</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An in-depth series to reverse engineering Brickplanet." />
+<meta name="keywords" content="Reverse Engineering, Lua, IL2CPP" />
+
+  <meta name="robots" content="noodp" />
+
+<link rel="canonical" href="/posts/brickplanet-introduction/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="/img/theme-colors/pink.png">
+  <link rel="apple-touch-icon" href="/img/theme-colors/pink.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Reverse Engineering Brickplanet | Introduction">
+<meta property="og:description" content="An in-depth series to reverse engineering Brickplanet." />
+<meta property="og:url" content="/posts/brickplanet-introduction/" />
+<meta property="og:site_name" content="Fishy&#39;s Blog" />
+
+  
+    <meta property="og:image" content="/img/favicon/pink.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+
+  <meta property="article:published_time" content="2023-10-07 08:07:40 -0500 CDT" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="pink">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    Fishy&#39;s Blog
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/about" >About</a></li>
+        
+      
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/brickplanet-introduction/">Reverse Engineering Brickplanet | Introduction</a>
+  </h1>
+  <div class="post-meta"><time class="post-date">2023-10-07</time><span class="post-author">Fishy</span><span class="post-reading-time">4 min read (840 words)</span></div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/brickplanet-series/">Brickplanet Series</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h1 id="disclaimer">Disclaimer:<a href="#disclaimer" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>The information provided in this document is intended <strong>solely for educational and informational purposes</strong>. It is not meant to belittle any individuals involved in Brickplanet&rsquo;s development or implementation. Rather, it aims to shed light on the internal workings of Brickplanet so that consumers can better understand what happens behind the scenes when using the platform. Any opinions expressed herein <strong>do not necessarily reflect those of Brickplanet</strong> or any other parties mentioned. This document is provided &ldquo;as is&rdquo; without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability and fitness for a particular purpose. I shall not be liable for any damages whatsoever arising out of or in connection with the use of this document.</p>
+<h1 id="full-series">Full Series<a href="#full-series" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<ul>
+<li><a href="/posts/brickplanet-introduction/#introduction">&ndash;&gt; Introduction &lt;&ndash;</a></li>
+<li><a href="/posts/brickplanet-dumping">Dumping IL2CPP</a></li>
+<li><a href="/posts/brickplanet-identification">Identification process</a></li>
+<li><a href="/posts/brickplanet-reversal">Reversal process</a></li>
+<li><a href="/posts/brickplanet-development">Development process</a></li>
+<li><a href="/posts/brickplanet-conclusion">Final product</a></li>
+</ul>
+<h1 id="prerequisites">Prerequisites<a href="#prerequisites" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>To embark on this exciting journey into the world of reverse engineering Brickplanet, it&rsquo;s essential to equip yourself with the right knowledge and tools. First and foremost, a solid grasp of memory and pointers in C++ will be your trusted companions on this adventure.</p>
+<p>In your toolkit, consider including powerful reverse engineering tools like<br>
+<code>IDA Pro</code>, <code>Ghidra</code>, or <code>Binja</code>. While not having a decompiler may pose challenges, fear not; it won&rsquo;t render the task impossible. Your success will depend on your skill level and determination, but rest assured, you&rsquo;re in for a rewarding challenge.</p>
+<p>A foundational understanding of game hacking theory and reverse engineering concepts is also highly recommended. This endeavor is a medium-level difficulty task, brimming with opportunities for learning and growth. So, I wholeheartedly encourage you to follow this guide—it&rsquo;s your key to unlocking success in your game hacking journey, blending fun and professionalism in equal measure.</p>
+<p>To commence this engaging and professionally-guided expedition, our toolkit will encompass <code>IDA Pro 7.6</code>, <code>Cheat Engine</code>, and <code>DNSpy</code>. Moreover, we will harness the capabilities of <code>Visual Studio</code> to compile our code effectively and efficiently. These tools, when utilized with skill and precision, will open the doors to a world of exciting possibilities in the realm of reverse engineering and game hacking.</p>
+<h1 id="introduction">Introduction<a href="#introduction" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>Hello there, and a hearty welcome to my exciting Brickplanet reversal series! Prepare to embark on a fascinating journey where we dive deep into the inner workings of Brickplanet and unlock the secrets to crafting your very own cheats. What we&rsquo;re cooking up here falls under the category of &lsquo;script executors&rsquo; – these are the clever cheats that run scripts in the game&rsquo;s Lua Virtual Machine. So, fasten your seatbelts, because we&rsquo;re about to take a thrilling ride through the world of Brickplanet exploits!</p>
+<h1 id="the-appeal-of-exploring-brickplanet">The Appeal of Exploring Brickplanet<a href="#the-appeal-of-exploring-brickplanet" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>You might find yourself wondering, &ldquo;Why delve into the world of Brickplanet reverse engineering, and what&rsquo;s in it for me?&rdquo; Well, by embarking on the journey of reverse engineering Brickplanet, you open the door to a captivating realm of knowledge and skills.</p>
+<p>Diving into Brickplanet&rsquo;s inner workings introduces you to a fascinating array of concepts, including IL2CPP, NLua, Lua5.2, Unity Networking, and the intricate workings of C# reflection. This endeavor not only promises an exciting adventure but also provides a valuable opportunity to expand your horizons within the realms of technology and software development.</p>
+<p>So, get ready to unlock the secrets of Brickplanet and broaden your understanding of these intriguing concepts!</p>
+<h1 id="overview">Overview<a href="#overview" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>To elucidate the next steps in this endeavor, let&rsquo;s begin by highlighting a few key insights. It&rsquo;s evident from the outset that we have some foundational knowledge to build upon.</p>
+<p>First and foremost, when we access the Brickplanet Workshop, we encounter the use of Lua as the scripting language to execute game scripts, thereby enabling us to influence and alter the in-game environment. Additionally, it&rsquo;s essential to recognize that Brickplanet operates on a client-server model, a fundamental aspect of its architecture.</p>
+<p>To provide a visual representation of this model within the context of Brickplanet, the diagram below offers an illustrative example:</p>
+<p><img src="/assets/clientserver.png" alt="Picture of Client-Server model"></p>
+<p>With this foundational understanding, we are well-equipped to delve deeper into the mechanics of Brickplanet and explore the exciting possibilities it presents.</p>
+<p>Within the context of our interaction with the Brickplanet server, it is important to acknowledge our role as the client, which inherently entails limited control over the actions and responses of the server. However, it is equally noteworthy that we do possess a certain degree of agency over our own client&rsquo;s environment. This empowerment manifests through our ability to engage in the injection of game scripts into our local client, thereby allowing modifications to our immediate in-game surroundings. The outcomes of these modifications are contingent upon specific circumstances and scenarios, as they may or may not propagate to the server, thus influencing the broader shared gameplay experience.</p>
+<h1 id="conclusion">Conclusion<a href="#conclusion" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h1>
+<p>Mastering the art of script execution is a thrilling challenge, but fear not! With this comprehensive guide at your side, crafting your very own script executor cheat will become a seamless and rewarding endeavor. Get ready for an exhilarating journey of skill and knowledge. I look forward to joining you in the upcoming segments of this series!</p>
+
+      </div></div>
+
+  
+    
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 Powered by <a href="https://gohugo.io">Hugo</a></span>
+    
+      <span>:: <a href="https://github.com/panr/hugo-theme-terminal" target="_blank">Theme</a> made by <a href="https://github.com/panr" target="_blank">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

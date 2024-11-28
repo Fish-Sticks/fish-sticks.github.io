@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="" />
+
+<meta name="description" content="Fish-Sticks blog on computer science and reverse engineering." />
+
+<meta name="keywords" content="blog, tech, programming, reverse-engineering, RE" />
+
+<meta name="fediverse:creator" content="@fishysticks@mastodon.social">
+
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.119.0">
+
+<link rel="canonical" href="/posts/bypass/">
+<meta property="og:title" content="Bypassing Hyperion with Serenity" />
+<meta property="og:description" content="SOURCE CODE For the following lesson we will be talking about the source code. You will be able to find the source code here.
+Introduction Hello everyone, today I will be showing you a Hyperion bypass I&rsquo;ve created which powers my proof-of-concept cheat named Serenity. You may have previously heard of me in 2022 releasing Headhunter a cheat I open sourced and publically maintained for a few months, which helped many people learn how game hacking works." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/bypass/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-11-28T07:07:07+01:00" />
+<meta property="article:modified_time" content="2024-11-28T07:07:07+01:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bypassing Hyperion with Serenity"/>
+<meta name="twitter:description" content="SOURCE CODE For the following lesson we will be talking about the source code. You will be able to find the source code here.
+Introduction Hello everyone, today I will be showing you a Hyperion bypass I&rsquo;ve created which powers my proof-of-concept cheat named Serenity. You may have previously heard of me in 2022 releasing Headhunter a cheat I open sourced and publically maintained for a few months, which helped many people learn how game hacking works."/>
+
+<meta itemprop="name" content="Bypassing Hyperion with Serenity">
+<meta itemprop="description" content="SOURCE CODE For the following lesson we will be talking about the source code. You will be able to find the source code here.
+Introduction Hello everyone, today I will be showing you a Hyperion bypass I&rsquo;ve created which powers my proof-of-concept cheat named Serenity. You may have previously heard of me in 2022 releasing Headhunter a cheat I open sourced and publically maintained for a few months, which helped many people learn how game hacking works."><meta itemprop="datePublished" content="2024-11-28T07:07:07+01:00" />
+<meta itemprop="dateModified" content="2024-11-28T07:07:07+01:00" />
+<meta itemprop="wordCount" content="4605">
+<meta itemprop="keywords" content="" />
+
+<link rel="stylesheet" href="/css/layout.css" />
+
+
+<link rel="stylesheet" href="/css/default-dark.css" />
+
+
+
+
+<title>
+
+
+     Bypassing Hyperion with Serenity 
+
+</title>
+
+</head>
+
+
+<body>
+<div class="main">
+<header>
+
+<div class="header-bar">
+
+  <nav>
+    <div class="siteTitle">
+      <a href="/">Fish-Sticks blog</a>
+    </div> 
+
+    
+    
+    <a class="nav-item" href="/posts"><div class="nav-item-title">Posts</div></a>
+    
+
+  </nav>
+
+</div>
+
+</header>
+
+
+<article class="post">
+    <h1 class="title"> Bypassing Hyperion with Serenity </h1>
+    <div class="content"> <h2 id="source-code">SOURCE CODE</h2>
+<p>For the following lesson we will be talking about the source code. You will be able to find the <a href="https://github.com/Fish-Sticks/Serenity">source code</a> here.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Hello everyone, today I will be showing you a Hyperion bypass I&rsquo;ve created which powers my proof-of-concept cheat named Serenity. You may have previously heard of me in 2022 releasing <strong>Headhunter</strong> a cheat I open sourced and publically maintained for a few months, which helped many people learn how game hacking works. I&rsquo;m sharing this with you so you can learn how it works, and learn more about computers. Do not use this to produce cheats. I am not responsible for what you do with this source. I hope everyone has a wonderful time learning what we have here, as you will not typically come across this kind of injection technique. This guide is designed for beginners who are willing to take a step out of their comfort zone, and learn more about their system. Although many of these topics aren&rsquo;t beginner friendly, the idea itself for this cheat is. You may think it&rsquo;s dumb for me to leak a Hyperion bypass but this was just something I made overnight while I was bored. To make a real bypass you will need to put much more time and development and consideration into your cheat, and I couldn&rsquo;t care less if this gets patched. Sorry if this post is rushed as it is currently Thanksgiving and I plan to hang out with my family, so I am rushing through this (creating the cheat &amp; writing the blog). Please note that the cheat doesn&rsquo;t follow the best coding practices and simply is the way I code. It is in no way the best way to go about things, and I encourage you learn your own style. At the bottom of this thread I have posted resources to learn the various concepts we talk about. I highly recommend you read them if you are interested. I have also provided various links throughout the reading to describe the related topic.</p>
+<h2 id="credits">Credits</h2>
+<p>All the work was created by me, (<a href="https://github.com/fish-sticks">Fish-Sticks</a> / Fishy / Birdy). You can contact me on Discord @ <strong>goatthegb</strong>. Please don&rsquo;t ask me to fix your cheat. I&rsquo;ll help you learn and reverse engineer, but I won&rsquo;t fix your problems for you, and I may come off very rude but remember it&rsquo;s nothing personal.</p>
+<p>Credits to my communities for supporting me, and making learning computer science a great experience.</p>
+<p><a href="https://discord.gg/UmTV8fKMVe">GDO</a> a great server which has an upcoming forum, and is designed to get you from beginner at game hacking to expert, along with learning other fields of computer science. Highly recommend you join this one if you are looking for any help or want to talk with like minded people.</p>
+<p><a href="https://discord.gg/7AjTMrJD2b">WEAREDEVS</a> <strong>NOT AFFILIATED WITH WEAREDEVS WEBSITE</strong>, just a server I made for old friends that were around during 2021 on WRD. Don&rsquo;t recommend joining unless you are well known in the WRD community, not much will go on here.</p>
+<h1 id="background-knowledge">Background Knowledge</h1>
+<h2 id="background-knowledge---basics">Background knowledge - Basics</h2>
+<p>Before we can start talking about how the bypass works please make sure you are familiar with assembly language. In this case we will be using amd64 assembly, and using <a href="https://www.felixcloutier.com/x86/">FelixCloutier</a> as a reference, as it goes into good detail and contains a psuedocode example of most instructions. We won&rsquo;t be using many complicated assembly examples here, but if you don&rsquo;t understand the fundamentals of stacks you may find yourself lost, as we create our own stack in one of the examples. Please make sure you are also comfortable with bitwise operations as I will be going slightly into some basic bitmath.</p>
+<h2 id="background-knowledge---hyperion">Background knowledge - Hyperion</h2>
+<p>Since we are creating a bypass for Hyperion we should also have some background on what Hyperion is. Hyperion is a <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/user-mode-and-kernel-mode">user-mode</a> anti-cheat developed by <a href="https://www.marketscreener.com/quote/stock/ROBLOX-CORPORATION-117793644/news/Roblox-Corporation-acquired-Byfron-Technologies-LLC-for-11-6-million-42268806/">Byfron</a> (a company under Roblox) which specializes in anti-tamper (blocking cheats from being injected / running), and the anti-cheat (issues bans and detects cheaters). We will be circumventing their anti-tamper techniques to get unsigned code execution inside the client. If you don&rsquo;t understand an example, you can re-read until you understand it, or even better try debugging it. By debugging you can see exactly how the assembly code affects the registers, and these shellcode examples I&rsquo;ve made I had to use a debugger for, which let me see any issues with the assembly code.</p>
+<h3 id="background-knowledge---executable-memory-scanner">Background Knowledge - Executable Memory Scanner</h3>
+<p>One of the anti-tamper methods Hyperion has made which has stopped <strong>many</strong> cheaters is their executable memory scanner. It will scan over memory regions and check the page protections of this memory. If the memory is marked with an executable flag (<a href="https://learn.microsoft.com/en-us/windows/win32/memory/memory-protection-constants#PAGE_EXECUTE">PAGE_EXECUTE</a> / <a href="https://learn.microsoft.com/en-us/windows/win32/memory/memory-protection-constants#PAGE_EXECUTE_READ">PAGE_EXECUTE_READ</a> / <a href="https://learn.microsoft.com/en-us/windows/win32/memory/memory-protection-constants#PAGE_EXECUTE_READWRITE">PAGE_EXECUTE_READWRITE</a>, etc) then it goes onto it&rsquo;s second check. It will check if you are whitelisted inside one of Hyperion&rsquo;s maps. It encrypts the address of the virtual page number (<strong>VPN</strong>) by removing the offset of the page (shifting right 12), alternatively the same logic can be presented by &amp; ~0xFFF. If you have trouble understanding how pages are stored for all you need to know is that let&rsquo;s say we have page <strong>0x7FF665DB3F94</strong>. Hyperion needs to track <strong>each</strong> whitelisted page, so instead of encrypting this <strong>specific</strong> address, it will instead drop the last 3 hex digits (which are offset into the current page), to grab the page base, being <strong>0x7FF665DB3000</strong>. It will take this <strong>VPN</strong> and <a href="https://www.pcmag.com/encyclopedia/term/xor">XOR</a> it by a constant which is generated and hardcoded for each build on compile time, so it is changing each update. By using a stupidly simple signature, you can actually find this encryption and easily whitelist your own pages but in this case we won&rsquo;t even be doing that, we will be doing something very simple instead. Once Hyperion has found a memory allocation it will determine if this memory is allowed to be executable or not. This may be a game page, a DLL such as user32.dll, or your cheat. Hyperion will hash and look up the VPN of the executable page inside its whitelisted page map. If it sees that you aren&rsquo;t in the whitelisted page map then it will remove executable permissions. PAGE_EXECUTE_READ will become PAGE_READONLY, PAGE_EXECUTE_READWRITE will become PAGE_READWRITE, etc. If Hyperion sees you inside the whitelisted page map, then it will continue on and not touch the page.</p>
+<h3 id="background-knowledge---thread-blocking">Background Knowledge - Thread Blocking</h3>
+<p>So we know how Hyperion determines if memory can be executable or not, but how does it detect threads? Hyperion detects thread injection attempts through various methods. For example if you try to use <a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-setthreadcontext">SetThreadContext</a> Hyperion will crash your game. If you try to call <a href="https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createremotethread">CreateRemoteThread</a> your thread will seemingly not run at all. Hyperion also has protection against threads with <a href="https://learn.microsoft.com/en-us/windows/win32/sync/asynchronous-procedure-calls">APCs</a> in their queue. For blocking CreateRemoteThread, Hyperion has a special mechanism called the instrumentation callback which will catch all kernel to usermode transitions. You may ask how this is possible from usermode, however Windows implemented a secret technology that isn&rsquo;t documented. By calling a couple NT API functions with the correct arguments you can register an instrumentation callback, so you too can intercept kernel -&gt; usermode transitions. Hyperion uses this to detect when LdrInitializeThunk is being called (This is called on new initializing threads), and inserts it&rsquo;s own hook to check the thread start <a href="https://www.quora.com/What-is-an-instruction-pointer">IP</a>. They go through a list of whitelisted thread start addresses, and if you are whitelisted then you are allowed to create your thread. However, we don&rsquo;t plan on having to whitelist ourselves here either as the technique we will be describing in Serenity is much more clever.</p>
+<h3 id="background-knowledge---tamper-proof-pages">Background Knowledge - Tamper Proof Pages</h3>
+<p>Although not as important as the other two checks, this is a very important check too. You may have tried to write data to the games code region, and noticed all your writes are failing. You may wonder how Hyperion has stopped you from writing to the game, after all they are blocking the kernel from writing the memory? Well, the answer is actually a bit more complicated. You will notice that these writes are blocked way too fast for it to be them simply replacing the data back, so what&rsquo;s really going on? Hyperion has again abused Windows internally, just like they have with catching kernel -&gt; usermode transitions. They mark their <a href="https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/section-objects-and-views">memory section</a> as SEC_NO_CHANGE. This is a special flag which basically tells Windows no matter what, don&rsquo;t let the protection of this page to change. You cannot undo this protection without directly manipulating the <a href="https://www.sciencedirect.com/science/article/pii/S1742287607000503">VAD</a>, or unmapping the section. I highly suggest you read about the VAD, but for a simple explanation think about how Hyperion finds all those pages. They simply go over all the pages used by the game. These are stored in the VAD from when you call VirtualAlloc. It holds information about each page, such as the protections and region sizes. If you have heard of PML4 paging structures, the VAD is like a higher level of it for the Windows operating system to have a simpler and more abstracted interface. Unlike the paging structures which must be in memory if they are defined, the VAD can described paged out sections too. I won&rsquo;t go too in depth about <a href="https://connormcgarr.github.io/paging/">PxE structures</a> or VAD but you can read about them with the provided links. All for now you need to know is that Hyperion has a way to prevent us from simply writing memory to the game, and overwriting the game&rsquo;s code. They also have an integrity checker which hashes each page with BLAKE3 and checks for any tampering, which if it&rsquo;s found then you will be crashed. One more idea I want you to know before we continue on is that Hyperion does have the ability to write to these pages, even though they are seemingly write proof. Hyperion creates a special view in another virtual address which points to the same memory. This second view has write permissions, unlike the original, but doesn&rsquo;t have execute permissions. If you are new to learning about memory management you might be <strong>shocked</strong> that two virtual addresses can point to the same exact memory, and I was too at first but it&rsquo;s actually all over if you look closer! For example, Windows shares the memory of most loaded DLLs between processes, as long as they don&rsquo;t modify anything. If they modify a page then it invokes COW (copy on write) and Windows creates that specific page just for your process, but the rest of the processes share the original copy. This is a core concept in Windows which allows your computer to keep your memory nicely managed. To prevent this section from getting too lengthy we will have to continue, but let me know if you would like a post just on paging &amp; memory in general.</p>
+<h1 id="the-bypass-theories">The Bypass Theories</h1>
+<h2 id="theory-a">Theory A</h2>
+<p>Okay so we need to bypass both their thread creation to get our code to run, and we must bypass their memory protection to have our cheat code be able to have execute permissions. We don&rsquo;t have to worry too much about their tamper protection, unless we plan on overwriting another already signed DLL. By simply whitelisting ourselves in the thread start check, and adding ourselves to the memory whitelist map we can bypass Hyperion right? Theoretically yes we can, and I have done it before, however it is a lot of effort to reverse engineer all that and have to update and maintain it. Let&rsquo;s think of alternatives that have been talked about before.</p>
+<h2 id="theory-b">Theory B</h2>
+<p>Many public internal sources right now have many different methods but one of the methods that was presented was preventing Hyperion from changing your protections. After all, they protected their code which can&rsquo;t have its protections changed, so why can&rsquo;t we? This was one of the early Hyperion bypass methods, and one of the first publically known ways to do it. You simply set your code to have SEC_NO_CHANGE and then Hyperion can&rsquo;t revert your page protections, so no matter what you will have execute permissions! Although this method sounds decent, it&rsquo;s still very much suboptimal. Let&rsquo;s go over some oversights this method has, and think of another way. The first oversight is assuming that you are safe just because Hyperion hasn&rsquo;t crashed you. Hyperion will simply see that it can&rsquo;t set your page protections, and it will have a couple of options. It can either remove your memory, scan your memory and upload it to the game for being suspicious, silently flag you, or do nothing!</p>
+<h2 id="theory-c">Theory C</h2>
+<p>Considering Hyperion tightly secures the game, what if we just go external? This is what many cheats have done once Hyperion was deployed. Although being external is an alright option, it presents many issues. One of these issues is synchronization. Since your thread isn&rsquo;t running in queue with the game, like it would normally be on the task scheduler you face a high risk of falling out of sync with the game. This can create issues such as reading variables at the wrong times, writing them when they are already used, etc. Writing externals is suboptimal due to their external checks with Deleter2 if you have heard of it. If you haven&rsquo;t then don&rsquo;t worry about it, as I will not be going in depth on it as it is out of the scope of this post.</p>
+<h2 id="theory-d">Theory D</h2>
+<p>Okay so we must be whitelisted by Hyperion. One of these cheats thought of another clever idea, which was to inject the DLL like a normal program would such as Discord. Discord injects its overlay into other processes, what if your cheat could do this too? While unfortunately the idea seems simple, there&rsquo;s more than a challenge presented. Hyperion ensures the DLL cannot be loaded by checking the certificate of the file, to make sure it is a legitimate program by a company. Buying certificates costs lots of money, and is an easy footprint for you if your cheat is using one. One exploit decided on another idea, what if we could lie to Hyperion about being signed? This would certainly allow Hyperion to load our cheat for us. By hooking <a href="https://learn.microsoft.com/en-us/windows/win32/api/wintrust/nf-wintrust-winverifytrust">WinVerifyTrust</a> you could spoof the result. While this method had lasted a while, it is patched now, and the Hyperion developers are well aware of it. Again please remember, having injection does NOT mean you are undetected. Hyperion anti-cheat is still very well aware of you, and you have only bypassed their anti-tamper.</p>
+<h2 id="theory-behind-serenity">Theory Behind Serenity</h2>
+<p>What if there was a way to be whitelisted without whitelisting ourselves? This would certainly help out, and speed up development times. Let&rsquo;s think about this harder, and realize that we can actually patch signed DLLs! Hyperion has already whitelisted these DLLs, and then all we are left with is having to deal with injection, so this is an optimal idea for getting unsigned code running inside the game. For this bypass we have decided on win32u.dll since it has a nice chunk of space before its first function, which allows for perfect room for a nice shellcode injection. Compilers generate some blank space in between each function to ensure each function is properly aligned for optimal execution. You can abuse this to place shellcode in between. You may have seen this in your reverse engineering tool, by seeing INT3 (0xCC) in between functions. Now all we must deal with is injection. We will be hijacking threads in a special way! Since calling SetThreadContext will crash our games we must find another way to hijack threads. I didn&rsquo;t want to hook any Hyperion functions since this would require updating, and also make this post longer, so I&rsquo;ve instead developed another idea. All we need to do is query the game thread, we don&rsquo;t technically need to set the context. You may wonder, but then how will we hijack the thread, or control the registers? This is where our assembly knowledge will come in. We must suspend a thread before we can retrieve its thread context. Since we have the thread suspended it must have somewhere to call to when we decide to unsuspend the thread. This is where our special injection method comes in, what if we simply swap the return value with our own. When we unsuspend the thread it will simply return to our desired code, and voila we won&rsquo;t have to use SetThreadContext or create a new thread! While this idea is easy to explain, we still must understand how to write the assembly for it. This is where our assembly knowledge comes in. For those that don&rsquo;t know, the stack grows DOWN. This means subtracting <a href="https://web.stanford.edu/class/archive/cs/cs107/cs107.1166/guide_x86-64.html">RSP</a> will actually <strong>allocate</strong> stack space (you can see this when an assembly routine creates space for locals). Adding RSP will <strong>remove</strong> stack space. This concept is very critical so please make sure you understand it. Here&rsquo;s another example, when you <a href="https://www.felixcloutier.com/x86/push">push</a> rbp (to allocate a stack frame) here&rsquo;s what&rsquo;s going on under the hood.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>IF StackAddrSize <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">64</span>
+</span></span><span style="display:flex;"><span>    THEN
+</span></span><span style="display:flex;"><span>        IF OperandSize <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">64</span>
+</span></span><span style="display:flex;"><span>            THEN
+</span></span><span style="display:flex;"><span>                RSP <span style="color:#ff6ac1">:=</span> RSP <span style="color:#ff5c57">–</span> <span style="color:#ff9f43">8</span>;
+</span></span><span style="display:flex;"><span>                Memory[SS:RSP] <span style="color:#ff6ac1">:=</span> SRC;
+</span></span><span style="display:flex;"><span>                    (<span style="color:#ff6ac1">*</span> push quadword <span style="color:#ff6ac1">*</span>)
+</span></span><span style="display:flex;"><span>        ELSE IF OperandSize <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">32</span>
+</span></span><span style="display:flex;"><span>            THEN
+</span></span><span style="display:flex;"><span>                RSP <span style="color:#ff6ac1">:=</span> RSP <span style="color:#ff5c57">–</span> <span style="color:#ff9f43">4</span>;
+</span></span><span style="display:flex;"><span>                Memory[SS:RSP] <span style="color:#ff6ac1">:=</span> SRC;
+</span></span><span style="display:flex;"><span>                    (<span style="color:#ff6ac1">*</span> push dword <span style="color:#ff6ac1">*</span>)
+</span></span><span style="display:flex;"><span>            ELSE (<span style="color:#ff6ac1">*</span> OperandSize <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">16</span> <span style="color:#ff6ac1">*</span>)
+</span></span><span style="display:flex;"><span>                RSP <span style="color:#ff6ac1">:=</span> RSP <span style="color:#ff5c57">–</span> <span style="color:#ff9f43">2</span>;
+</span></span><span style="display:flex;"><span>                Memory[SS:RSP] <span style="color:#ff6ac1">:=</span> SRC;
+</span></span><span style="display:flex;"><span>                    (<span style="color:#ff6ac1">*</span> push word <span style="color:#ff6ac1">*</span>)
+</span></span><span style="display:flex;"><span>        FI;
+</span></span></code></pre></div><p>If we look closely, pushing RBP (a 64 bit operand) will first subtract the stack, and then set the current pointer of RSP to RBP. This means the stack subtracts before it writes. If we wanted to replace the return value of the thread we suspend, we will simply write to RSP as we don&rsquo;t want to push anything, but overwrite what&rsquo;s at the top. Before we overwrite this return we will want to save it so we can have our shellcode return back to the real return value after, this way the thread can continue execution past our control.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#78787e">// Retrieve old return value off stack (remember the thread is suspended so it has to have a return here)
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>std<span style="color:#ff6ac1">::</span>uintptr_t oldReturnValue <span style="color:#ff6ac1">=</span> <span style="color:#ff9f43">0</span>;
+</span></span><span style="display:flex;"><span>ReadProcessMemory(robloxInfo.hRoblox, (PVOID)threadCtx.Rsp, <span style="color:#ff6ac1">&amp;</span>oldReturnValue, <span style="color:#ff6ac1">sizeof</span>(oldReturnValue), <span style="color:#ff6ac1">nullptr</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e">// Replace return to our hook
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>WriteProcessMemory(robloxInfo.hRoblox, (PVOID)threadCtx.Rsp, <span style="color:#ff6ac1">&amp;</span>baseText, <span style="color:#ff6ac1">sizeof</span>(baseText), <span style="color:#ff6ac1">nullptr</span>);
+</span></span></code></pre></div><p><strong>baseText</strong> points to the beginning of our shellcode, so what this code is doing is basically telling the CPU that when it executes a <a href="https://www.felixcloutier.com/x86/ret">ret</a> instead of returning to the old value, we will return to ours. The CPU will read RSP when ret is executed, and see our value instead of the old value since we have written it. Since the RSP is stored in data, we don&rsquo;t need to set any thread context or modify any registers to preform this sneaky injection. Now that we have control over execution of a thread, and signed memory we still have one more issue. How will our shellcode have all the necessary data to run, and properly return back in such a tight space? If you have seen in your preferred reverse engineering tool or debugger, you will notice there isn&rsquo;t much space between functions. By using win32u.dll we have about 60 bytes of space before we hit the first function, which is plenty for tightly coded shellcode. This is where the magic of my shellcode comes in. I&rsquo;ve created shellcode which can use 4 pointers (32 bytes of data), and still have an injection space of only 41. This means we are packing an extra 32 bytes that would otherwise be originally inside the shellcode, inside data by simply moving all our pointers over. For those who are confused I will present some examples. We must think about how assembly works. Assembly can have lots of pointers inside the code, or it can be moved into data, and use memory reads and writes. We will profit off this with a very efficient method, by combining our knowledge with the stack. If you remember, we cannot write registers since we don&rsquo;t have SetThreadContext but once we are internal we can do anything we want to these registers. So the injector can simply set up one pointer, which holds ALL our data inside a format that the stack can read. This way we only take up 8 bytes of data in our shellcode, which allows for 90% code instead of putting pointers all over. So in other words, we construct our own pretend stack with all the data on it. This allows us to use pop which is a 1 byte instruction to read 8 bytes of data. Here is a more in depth example:</p>
+<p>We could either have</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>     ASSEMBLY CODE          <span style="color:#ff6ac1">|</span>       MACHINE CODE
+</span></span><span style="display:flex;"><span>movabs rax, <span style="color:#ff9f43">0xaabbccddeee11</span> <span style="color:#ff6ac1">|</span> <span style="color:#ff9f43">48</span> b8 <span style="color:#ff9f43">11</span> ee de cd bc ab <span style="color:#ff9f43">0</span>a <span style="color:#ff9f43">00</span>
+</span></span></code></pre></div><p>Which takes up many bytes of data, and reduces the amount of shellcode logic we can have, or we could have a much smaller</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ASSEMBLY CODE   <span style="color:#ff6ac1">|</span>   MACHINE CODE
+</span></span><span style="display:flex;"><span>pop rax         <span style="color:#ff6ac1">|</span>       <span style="color:#ff9f43">58</span>
+</span></span></code></pre></div><p>Which takes up only a singular byte, and only requires the stack to be prepared right, which can be done externally. By utilizing this idea we save a TON of space.</p>
+<p>I will now show the entire shellcode to you, and it is your job to carefully read it and understand it. Remember that the pointer value is a dummy value which is later filled in with the real value by the injector. Please also remember that the stack this dummy pointer holds is properly setup by the C++ code, which I will show here.</p>
+<p>C++ code which sets up the virtual stack:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#78787e">// We will store all the data our shellcode needs here in this custom stack space.
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e">// This allows us to pack the code tighter by storing some of the information in data such as pointers
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e">// On top of this if we use this storage as a stack we can turn an 8 byte moving a pointer into a register, into a 1 byte pop which saves a LOT of space.
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span><span style="color:#9aedfe">void</span><span style="color:#ff6ac1">*</span> VariableStorage <span style="color:#ff6ac1">=</span> VirtualAllocEx(robloxInfo.hRoblox, <span style="color:#ff9f43">0</span>, <span style="color:#ff9f43">0x1000</span>, MEM_COMMIT <span style="color:#ff6ac1">|</span> MEM_RESERVE, PAGE_READWRITE);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WriteProcessMemory(robloxInfo.hRoblox, VariableStorage, <span style="color:#ff6ac1">&amp;</span>oldReturnValue, <span style="color:#ff6ac1">sizeof</span>(oldReturnValue), <span style="color:#ff6ac1">nullptr</span>); <span style="color:#78787e">// +0 = Return
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>
+</span></span><span style="display:flex;"><span>WriteProcessMemory(robloxInfo.hRoblox, (PVOID)((std<span style="color:#ff6ac1">::</span>uintptr_t)VariableStorage <span style="color:#ff6ac1">+</span> <span style="color:#ff9f43">8</span>), <span style="color:#ff6ac1">&amp;</span>myMessagePtr, <span style="color:#ff6ac1">sizeof</span>(myMessagePtr), <span style="color:#ff6ac1">nullptr</span>); <span style="color:#78787e">// +8 = Message
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>
+</span></span><span style="display:flex;"><span>WriteProcessMemory(robloxInfo.hRoblox, (PVOID)((std<span style="color:#ff6ac1">::</span>uintptr_t)VariableStorage <span style="color:#ff6ac1">+</span> <span style="color:#ff9f43">16</span>), <span style="color:#ff6ac1">&amp;</span>myTitlePtr, <span style="color:#ff6ac1">sizeof</span>(myTitlePtr), <span style="color:#ff6ac1">nullptr</span>); <span style="color:#78787e">// +16 = Title
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>
+</span></span><span style="display:flex;"><span>WriteProcessMemory(robloxInfo.hRoblox, (PVOID)((std<span style="color:#ff6ac1">::</span>uintptr_t)VariableStorage <span style="color:#ff6ac1">+</span> <span style="color:#ff9f43">24</span>), <span style="color:#ff6ac1">&amp;</span>MessageBoxAPtr, <span style="color:#ff6ac1">sizeof</span>(MessageBoxAPtr), <span style="color:#ff6ac1">nullptr</span>); <span style="color:#78787e">// +24 = Func to call
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#78787e">// Since the stack GROWS down, popping the stack will actually raise the value of the stack pointer (which in this case reads the variable storage for us incrementally)
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e"></span><span style="color:#ff6ac1">*</span>(std<span style="color:#ff6ac1">::</span>uintptr_t<span style="color:#ff6ac1">*</span>)(<span style="color:#ff6ac1">&amp;</span>shellcode[<span style="color:#ff9f43">4</span>]) <span style="color:#ff6ac1">=</span> (std<span style="color:#ff6ac1">::</span>uintptr_t)VariableStorage;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WriteProcessMemory(robloxInfo.hRoblox, (PVOID)baseText, shellcode, <span style="color:#ff6ac1">sizeof</span>(shellcode), <span style="color:#ff6ac1">nullptr</span>); <span style="color:#78787e">// Write the code payload for shellcode.
+</span></span></span></code></pre></div><p>As you can see it will create the virtual stack space, fill the data inside it, and then replace the dummy pointer in the shellcode (shown below) with the real stack pointer. Then it writes it inside a legitimate module (win32u.dll) to have the executable code which is already whitelisted.</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#78787e">// X64 CALLING CONVENTION: rcx, rdx, r8, r9, stack (right to left)
+</span></span></span><span style="display:flex;"><span><span style="color:#78787e">// MESSAGEBOXA FUNCTION: rcx (HWND), rdx (message text), r8 (message title), r9 (icon and buttons flags)
+</span></span></span></code></pre></div><p>Assembly shellcode which is injected into the game:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>push r15 ; Preserve r15
+</span></span><span style="display:flex;"><span>mov r15, <span style="color:#ff9f43">0xAABBCCDDEEFF1122</span> ; Temporary hold stack
+</span></span><span style="display:flex;"><span>xchg r15, rsp ; Swap <span style="color:#57c7ff">stack</span> (WE WILL NOW BE USING OUR VIRTUAL STACK)
+</span></span><span style="display:flex;"><span>pop r14 ; Pop real <span style="color:#ff6ac1">return</span> address
+</span></span><span style="display:flex;"><span>pop rdx ; Text argument
+</span></span><span style="display:flex;"><span>pop r8  ; Title argument
+</span></span><span style="display:flex;"><span>pop rax ; Function to call
+</span></span><span style="display:flex;"><span>xchg r15, rsp ; Restore <span style="color:#57c7ff">stack</span> (WE ARE BACK IN THE REAL STACK)
+</span></span><span style="display:flex;"><span>pop r15 ; Restore r15
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>xor rcx, rcx ; Clear <span style="color:#57c7ff">RCX</span> (HWND)
+</span></span><span style="display:flex;"><span>mov r9, <span style="color:#ff9f43">0x30</span> ; Warning icon
+</span></span><span style="display:flex;"><span>call rax ; Call MessageBoxA
+</span></span><span style="display:flex;"><span>jmp r14 ; Go back to original <span style="color:#ff6ac1">return</span> value
+</span></span></code></pre></div><p>You will notice that this snippet actually overwrites a couple registers. As long as the game doesn&rsquo;t depend on these registers, we will be relatively fine, and if we stick to the <a href="https://learn.microsoft.com/en-us/cpp/build/x64-software-conventions?view=msvc-170">volatile registers</a> then we will be even more safe. By safe I mean safe from crashing due to bad assembly code, not because of Hyperion.</p>
+<p>Upon combining our memory whitelist vulnerability with our thread hijack vulnerability, we have essentially bypassed Hyperion&rsquo;s core anti-tamper goals. We now have code running inside Roblox which will trigger a message box, giving ourselves a nice success!
+<img src="/images/mb.png" alt="Serenity showing a message box"></p>
+<p>Okay but what if we wanted to do something else, such as actually print inside Roblox and see our cheat in the developer console? Well since Serenity is internal we don&rsquo;t have to worry about page decryption, as Hyperion will automatically decrypt any page we touch for us. Let&rsquo;s change our shellcode up a bit, so instead of above, it is now this.</p>
+<p>New shellcode for calling print inside Roblox:</p>
+<div class="highlight"><pre tabindex="0" style="color:#e2e4e5;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>mov rax, <span style="color:#ff9f43">0xAABBCCDDEEFF</span> ; Print function
+</span></span><span style="display:flex;"><span>mov ecx, <span style="color:#ff9f43">1</span> ; Print <span style="color:#ff5c57">format</span> specifier
+</span></span><span style="display:flex;"><span>mov rdx, <span style="color:#ff9f43">0xAABBCCDDEEFF</span> ; Print text
+</span></span><span style="display:flex;"><span>call rax ; Call <span style="color:#ff5c57">print</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mov rax, <span style="color:#ff9f43">0xAABBCCDDEEFF</span> ; <span style="color:#ff6ac1">return</span> back to real code
+</span></span><span style="display:flex;"><span>jmp rax
+</span></span></code></pre></div><p>Unlike the other shellcode this one uses a lot more pointers and thus takes up much more space than it needed to. I&rsquo;ll let you find out how to apply your own virtual stack method onto it to prevent taking up so much space, but it isn&rsquo;t anything that will affect this shellcode since it&rsquo;s small enough. Obviously as before, our injector will fill out these &ldquo;template&rdquo; values for our real values. The code is quite self explanatory so I won&rsquo;t be doing too much explaining.</p>
+<p><img src="/images/print.png" alt="Serenity printing to console"></p>
+<p>If it isn&rsquo;t clear enough, Serenity is now an internal and can do anything you want. This includes calling lua functions, serving as a base for hooking functions to spoof values, or even block APIs.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>I hope you have enjoyed reading this, and hopefully have learned some new things or at least found it interesting. I don&rsquo;t know if I will be uploading any more posts anytime soon as they require a lot of effort to make, but perhaps with some motivation I&rsquo;d be willing to share more. I won&rsquo;t be going in depth on how to further leverage Serenity to inject a whole DLL but this is enough information for you, the reader to do that! Experiment with Serenity all you want, and enjoy it until it gets patched. This is my Thanksgiving gift for you, consider it an early Christmas present! The entire Serenity source is available at the top of this post, just please don&rsquo;t use it to actually cheat. Instead use it as an opportunity to learn more about how Windows or Hyperion works. Perhaps you may even come up with your own ideas and have your own secret cheat that works in a special way nobody knows about. Serenity isn&rsquo;t my only cheat I&rsquo;ve made that is unique, but I thought it was worth sharing since it is beginner friendly and doesn&rsquo;t spill too many secrets. If you are confused about anything please read the resource links provided, as I have spent time gathering resources so you don&rsquo;t have to!</p>
+<h1 id="resources">Resources</h1>
+<h3 id="assembly">Assembly:</h3>
+<p><em><a href="https://www.felixcloutier.com/x86/">Felix Cloutier - x86 and amd64 instruction reference</a></em></p>
+<p><em><a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html">Intel - Intel® 64 and IA-32 Architectures Software Developer&rsquo;s Manual Combined Volumes 2A, 2B, 2C, and  2D: Instruction Set Reference, A- Z</a></em></p>
+<h3 id="memory">Memory:</h3>
+<p><em><a href="https://connormcgarr.github.io/paging/">Connor McGarr - Turning the Pages: Introduction to Memory Paging on Windows 10 x64</a></em></p>
+<p><em><a href="https://zolutal.github.io/understanding-paging/">Justin Miller - Understanding x86_64 Paging</a></em></p>
+<p><em><a href="https://www.coresecurity.com/core-labs/articles/getting-physical-extreme-abuse-of-intel-based-paging-systems-part-1">Fortra - Getting Physical: Extreme abuse of Intel based Paging Systems - Part 1</a></em></p>
+<p><em><a href="https://learn.microsoft.com/en-us/windows/win32/memory/virtual-memory-functions">Microsoft - Virtual Memory Functions</a></em></p>
+<p><em><a href="https://web.archive.org/web/20240925100606/https://www.triplefault.io/2017/07/introduction-to-ia-32e-hardware-paging.html">TripleFault.io - Introduction to IA-32e hardware paging</a></em></p>
+<p><em><a href="https://web.archive.org/web/20240621120806/https://www.triplefault.io/2017/08/exploring-windows-virtual-memory.html">TripleFault.io - Exploring Windows virtual memory management</a></em></p>
+<h3 id="threads">Threads:</h3>
+<p><em><a href="https://www.codeproject.com/Articles/5355373/Understanding-Windows-Asynchronous-Procedure-Calls">Bruno van Dooren - Understanding Windows Asynchronous Procedure Calls (APCs)</a></em></p>
+<p><em><a href="https://scorpiosoftware.net/2024/07/24/what-can-you-do-with-apcs/">Pavel Yosifovich - What Can You Do with APCs?</a></em></p>
+<p><em><a href="https://rce4fun.blogspot.com/2014/11/windows-thread-suspension-internals.html">Souhail Hammou - Windows Thread Suspension Internals Part 1</a></em></p>
+<h3 id="tools">Tools:</h3>
+<p><em><a href="https://github.com/Fish-Sticks/roblox-decryptor">Gogo1000 &amp; Fishy - Static Decryptor for Roblox</a></em></p>
+<p><em><a href="https://defuse.ca/online-x86-assembler.htm">Defuse Security - Online assembler &amp; disassembler</a></em></p>
+ </div>
+    <footer class="post-footer">
+
+  <div class="post-footer-data">
+            
+<div class="tags">
+  
+</div>
+
+    
+    <hr>
+    
+    <div class="date"> Published: 2024-11-28</div>
+    <div class="updated"> Updated:   2024-11-28</div>
+  </div>
+</footer>
+
+
+
+</article>
+
+  <footer>
+
+  <div class="social-links-footer">
+
+  
+
+  
+  <a href="https://github.com/Fish-Sticks" target="_blank"><div class="social-link">GitHub</div></a>
+  
+
+  
+
+  
+
+  
+
+  
+  <a rel="me" href="https://mastodon.social/@fishysticks" target="_blank"><div class="social-link">Mastodon</div></a>
+  
+
+  <div class="social-link">
+  
+  </div>
+
+</div>
+
+
+  <div class="copyright"> Copyright (c) 2024, all rights reserved. </div>
+
+  <div class="poweredby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>.
+  </div>
+
+  </footer>
+
+</div> 
+
+</body>
+</html>
+

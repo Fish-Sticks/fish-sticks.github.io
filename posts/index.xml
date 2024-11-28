@@ -1,52 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Fishy&#39;s Blog</title>
+    <title>Posts on Fish-Sticks blog</title>
     <link>/posts/</link>
-    <description>Recent content in Posts on Fishy&#39;s Blog</description>
+    <description>Recent content in Posts on Fish-Sticks blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Sat, 07 Oct 2023 08:07:40 -0500</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-US</language>
+    <copyright>Copyright (c) 2024, all rights reserved.</copyright>
+    <lastBuildDate>Thu, 28 Nov 2024 07:07:07 +0100</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Reverse Engineering Brickplanet | Introduction</title>
-      <link>/posts/brickplanet-introduction/</link>
-      <pubDate>Sat, 07 Oct 2023 08:07:40 -0500</pubDate>
+      <title>Bypassing Hyperion with Serenity</title>
+      <link>/posts/bypass/</link>
+      <pubDate>Thu, 28 Nov 2024 07:07:07 +0100</pubDate>
       
-      <guid>/posts/brickplanet-introduction/</guid>
-      <description>Disclaimer: The information provided in this document is intended solely for educational and informational purposes. It is not meant to belittle any individuals involved in Brickplanet&amp;rsquo;s development or implementation. Rather, it aims to shed light on the internal workings of Brickplanet so that consumers can better understand what happens behind the scenes when using the platform. Any opinions expressed herein do not necessarily reflect those of Brickplanet or any other parties mentioned.</description>
-      <content>&lt;h1 id=&#34;disclaimer&#34;&gt;Disclaimer:&lt;/h1&gt;
-&lt;p&gt;The information provided in this document is intended &lt;strong&gt;solely for educational and informational purposes&lt;/strong&gt;. It is not meant to belittle any individuals involved in Brickplanet&amp;rsquo;s development or implementation. Rather, it aims to shed light on the internal workings of Brickplanet so that consumers can better understand what happens behind the scenes when using the platform. Any opinions expressed herein &lt;strong&gt;do not necessarily reflect those of Brickplanet&lt;/strong&gt; or any other parties mentioned. This document is provided &amp;ldquo;as is&amp;rdquo; without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability and fitness for a particular purpose. I shall not be liable for any damages whatsoever arising out of or in connection with the use of this document.&lt;/p&gt;
-&lt;h1 id=&#34;full-series&#34;&gt;Full Series&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-introduction/#introduction&#34;&gt;&amp;ndash;&amp;gt; Introduction &amp;lt;&amp;ndash;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-dumping&#34;&gt;Dumping IL2CPP&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-identification&#34;&gt;Identification process&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-reversal&#34;&gt;Reversal process&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-development&#34;&gt;Development process&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;/posts/brickplanet-conclusion&#34;&gt;Final product&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;prerequisites&#34;&gt;Prerequisites&lt;/h1&gt;
-&lt;p&gt;To embark on this exciting journey into the world of reverse engineering Brickplanet, it&amp;rsquo;s essential to equip yourself with the right knowledge and tools. First and foremost, a solid grasp of memory and pointers in C++ will be your trusted companions on this adventure.&lt;/p&gt;
-&lt;p&gt;In your toolkit, consider including powerful reverse engineering tools like&lt;br&gt;
-&lt;code&gt;IDA Pro&lt;/code&gt;, &lt;code&gt;Ghidra&lt;/code&gt;, or &lt;code&gt;Binja&lt;/code&gt;. While not having a decompiler may pose challenges, fear not; it won&amp;rsquo;t render the task impossible. Your success will depend on your skill level and determination, but rest assured, you&amp;rsquo;re in for a rewarding challenge.&lt;/p&gt;
-&lt;p&gt;A foundational understanding of game hacking theory and reverse engineering concepts is also highly recommended. This endeavor is a medium-level difficulty task, brimming with opportunities for learning and growth. So, I wholeheartedly encourage you to follow this guide—it&amp;rsquo;s your key to unlocking success in your game hacking journey, blending fun and professionalism in equal measure.&lt;/p&gt;
-&lt;p&gt;To commence this engaging and professionally-guided expedition, our toolkit will encompass &lt;code&gt;IDA Pro 7.6&lt;/code&gt;, &lt;code&gt;Cheat Engine&lt;/code&gt;, and &lt;code&gt;DNSpy&lt;/code&gt;. Moreover, we will harness the capabilities of &lt;code&gt;Visual Studio&lt;/code&gt; to compile our code effectively and efficiently. These tools, when utilized with skill and precision, will open the doors to a world of exciting possibilities in the realm of reverse engineering and game hacking.&lt;/p&gt;
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-&lt;p&gt;Hello there, and a hearty welcome to my exciting Brickplanet reversal series! Prepare to embark on a fascinating journey where we dive deep into the inner workings of Brickplanet and unlock the secrets to crafting your very own cheats. What we&amp;rsquo;re cooking up here falls under the category of &amp;lsquo;script executors&amp;rsquo; – these are the clever cheats that run scripts in the game&amp;rsquo;s Lua Virtual Machine. So, fasten your seatbelts, because we&amp;rsquo;re about to take a thrilling ride through the world of Brickplanet exploits!&lt;/p&gt;
-&lt;h1 id=&#34;the-appeal-of-exploring-brickplanet&#34;&gt;The Appeal of Exploring Brickplanet&lt;/h1&gt;
-&lt;p&gt;You might find yourself wondering, &amp;ldquo;Why delve into the world of Brickplanet reverse engineering, and what&amp;rsquo;s in it for me?&amp;rdquo; Well, by embarking on the journey of reverse engineering Brickplanet, you open the door to a captivating realm of knowledge and skills.&lt;/p&gt;
-&lt;p&gt;Diving into Brickplanet&amp;rsquo;s inner workings introduces you to a fascinating array of concepts, including IL2CPP, NLua, Lua5.2, Unity Networking, and the intricate workings of C# reflection. This endeavor not only promises an exciting adventure but also provides a valuable opportunity to expand your horizons within the realms of technology and software development.&lt;/p&gt;
-&lt;p&gt;So, get ready to unlock the secrets of Brickplanet and broaden your understanding of these intriguing concepts!&lt;/p&gt;
-&lt;h1 id=&#34;overview&#34;&gt;Overview&lt;/h1&gt;
-&lt;p&gt;To elucidate the next steps in this endeavor, let&amp;rsquo;s begin by highlighting a few key insights. It&amp;rsquo;s evident from the outset that we have some foundational knowledge to build upon.&lt;/p&gt;
-&lt;p&gt;First and foremost, when we access the Brickplanet Workshop, we encounter the use of Lua as the scripting language to execute game scripts, thereby enabling us to influence and alter the in-game environment. Additionally, it&amp;rsquo;s essential to recognize that Brickplanet operates on a client-server model, a fundamental aspect of its architecture.&lt;/p&gt;
-&lt;p&gt;To provide a visual representation of this model within the context of Brickplanet, the diagram below offers an illustrative example:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/assets/clientserver.png&#34; alt=&#34;Picture of Client-Server model&#34;&gt;&lt;/p&gt;
-&lt;p&gt;With this foundational understanding, we are well-equipped to delve deeper into the mechanics of Brickplanet and explore the exciting possibilities it presents.&lt;/p&gt;
-&lt;p&gt;Within the context of our interaction with the Brickplanet server, it is important to acknowledge our role as the client, which inherently entails limited control over the actions and responses of the server. However, it is equally noteworthy that we do possess a certain degree of agency over our own client&amp;rsquo;s environment. This empowerment manifests through our ability to engage in the injection of game scripts into our local client, thereby allowing modifications to our immediate in-game surroundings. The outcomes of these modifications are contingent upon specific circumstances and scenarios, as they may or may not propagate to the server, thus influencing the broader shared gameplay experience.&lt;/p&gt;
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-&lt;p&gt;Mastering the art of script execution is a thrilling challenge, but fear not! With this comprehensive guide at your side, crafting your very own script executor cheat will become a seamless and rewarding endeavor. Get ready for an exhilarating journey of skill and knowledge. I look forward to joining you in the upcoming segments of this series!&lt;/p&gt;
-</content>
+      <guid>/posts/bypass/</guid>
+      <description>SOURCE CODE For the following lesson we will be talking about the source code. You will be able to find the source code here.
+Introduction Hello everyone, today I will be showing you a Hyperion bypass I&amp;rsquo;ve created which powers my proof-of-concept cheat named Serenity. You may have previously heard of me in 2022 releasing Headhunter a cheat I open sourced and publically maintained for a few months, which helped many people learn how game hacking works.</description>
     </item>
     
   </channel>
